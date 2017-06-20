@@ -14000,7 +14000,7 @@ In question 6 <code>max_depth</code> was 3 now its <code>4</code></p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Produce a matrix for client data</span>
@@ -14011,6 +14011,12 @@ In question 6 <code>max_depth</code> was 3 now its <code>4</code></p>
 <span class="c1"># Show predictions</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">price</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">client_data</span><span class="p">)):</span>
     <span class="k">print</span> <span class="s2">&quot;Predicted selling price for Client {}&#39;s home: ${:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s2">&quot;Feature Description&quot;</span>
+
+<span class="n">features</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+
+<span class="c1"># zip(X_train.columns, reg.feature_importances_)</span>
 </pre></div>
 
 </div>
@@ -14028,8 +14034,93 @@ In question 6 <code>max_depth</code> was 3 now its <code>4</code></p>
 <pre>Predicted selling price for Client 1&#39;s home: $403,025.00
 Predicted selling price for Client 2&#39;s home: $237,478.72
 Predicted selling price for Client 3&#39;s home: $931,636.36
+Feature Description
 </pre>
 </div>
+</div>
+
+<div class="output_area">
+<div class="prompt output_prompt">Out[33]:</div>
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>RM</th>
+      <th>LSTAT</th>
+      <th>PTRATIO</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>489.000000</td>
+      <td>489.000000</td>
+      <td>489.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>6.240288</td>
+      <td>12.939632</td>
+      <td>18.516564</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>0.643650</td>
+      <td>7.081990</td>
+      <td>2.111268</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>3.561000</td>
+      <td>1.980000</td>
+      <td>12.600000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>5.880000</td>
+      <td>7.370000</td>
+      <td>17.400000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>6.185000</td>
+      <td>11.690000</td>
+      <td>19.100000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>6.575000</td>
+      <td>17.120000</td>
+      <td>20.200000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>8.398000</td>
+      <td>37.970000</td>
+      <td>22.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
 </div>
 
 </div>
@@ -14051,12 +14142,15 @@ Maximum price: $1,024,800.00
 Mean price: $454,342.94
 Median price $438,900.00
 Standard deviation of prices: $165,171.13</p>
-<h6 id="Analysis">Analysis<a class="anchor-link" href="#Analysis">&#182;</a></h6><p>For Client 1's home:
-Selling price is lower and closer to Mean and Median price so the price is reasonable.</p>
-<p>For Client 2's home:
-Selling price is lower and far from Mean and Median price so it is good deal but seems to be less reasonable.</p>
-<p>For Client 3's home:
-Selling price is greater and far from Mean and Median price so it is not reasonable.</p>
+<p>Effects of features:
+RM: expected to increase price
+LSTAT: expected to decrease price</p>
+<h6 id="Analysis">Analysis<a class="anchor-link" href="#Analysis">&#182;</a></h6><p><strong>For Client 1's home: [The values are in (below25%) to 75% range of their respective categories]</strong></p>
+<p>Effects of features: For this client [RM,LSTAT,PTRATIO] is [5, 17, 15] i.e. (RM is lower so price should be lower than mean ) + (LSTAT is heigher so price should be lower than mean ) + (PTRATIO is lower than the mean) so we can conclude that overall price should be lower than the mean hence price is <strong> reasonable </strong></p>
+<p><strong>For Client 2's home: [The values are (min - max) range of their respective categories]</strong></p>
+<p>Effects of features: For this client [RM,LSTAT,PTRATIO] is [4, 32, 22] i.e. (RM is lower(below 25%) so price should be lower than mean ) + (LSTAT is heigher(above 75%) so price should be lower than mean ) + (PTRATIO is heigher than the mean so price should be lower) so we can conclude that overall price should be lower than the mean hence price is <strong> practically good deal but not reasonable </strong></p>
+<p><strong>For Client 3's home: [The values are not in range of 25% to 75% but in (min to max) of their respective categories]</strong></p>
+<p>Effects of features: For this client [RM,LSTAT,PTRATIO] is [8, 3, 12] i.e. (RM is heigher so price should be higher than mean ) + (LSTAT is low so price should be higher than mean ) + (PTRATIO is lower than the mean so price should be higher) so we can conclude that overall price should be higher than the mean hence price is <strong> not that much reasonable </strong></p>
 
 </div>
 </div>
